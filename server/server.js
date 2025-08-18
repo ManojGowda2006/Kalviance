@@ -8,7 +8,7 @@ const router = require('./routes/route');
 const connectDB = require('./database/database');
 
 // Connect to MongoDB
-connectDB();
+// connectDB();
 
 
 app.use(cors({
