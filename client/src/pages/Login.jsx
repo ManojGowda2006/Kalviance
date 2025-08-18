@@ -1,9 +1,11 @@
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 const { VITE_API_URL } = import.meta.env;
 
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-white">
       {/* Left Side */}
@@ -36,6 +38,8 @@ const Login = () => {
                 );
                 if (res.status === 200) {
                   console.log("Login Successful");
+                  navigate("/achievements");
+
                 }
               } catch (error) {
                 console.error("Login Error:", error);

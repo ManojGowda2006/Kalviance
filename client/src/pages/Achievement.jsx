@@ -1,72 +1,10 @@
 import React, { useState } from 'react';
-import { Award, Activity, Grid, Plus, ChevronDown, MessageCircle, Heart, Search, User2 } from 'lucide-react';
+import { Award, Activity, Grid, Plus, ChevronDown, MessageCircle, Heart, User2, X } from 'lucide-react';
 
 const Achievement = () => {
-  // Mock data for the achievement cards
-  const achievements = [
-    {
-      id: 1,
-      tag: { label: 'Dojo Belt', color: 'bg-yellow-200 text-yellow-800 border-yellow-300', strapColor: 'border-t-4 border-yellow-500' },
-      title: 'Black Belt in Data Structures',
-      user: { name: 'Arjun Patel', squad: 'Squad 69' },
-      description: 'Completed advanced algorithms track with 95% accuracy. Solved 150+ complex problems!',
-      time: '2 days ago',
-      comments: 24,
-      likes: 8
-    },
-    {
-      id: 2,
-      tag: { label: 'Hackathon', color: 'bg-green-100 text-green-800 border-green-300', strapColor: 'border-t-4 border-green-500' },
-      title: 'Won TechFest 2024',
-      user: { name: 'Priya Sharma', squad: 'Squad 70' },
-      description: '1st place in AI/ML category with our healthcare solution. Team of 4 from Squad 70.',
-      time: '5 days ago',
-      comments: 45,
-      likes: 12
-    },
-    {
-      id: 3,
-      tag: { label: 'Internship', color: 'bg-indigo-100 text-indigo-800 border-indigo-300', strapColor: 'border-t-4 border-indigo-500' },
-      title: 'Google Summer of Code',
-      user: { name: 'Rahul Kumar', squad: 'Squad 69' },
-      description: 'Selected for GSoC 2024! Working on open-source ML tools with TensorFlow team.',
-      time: '1 week ago',
-      comments: 67,
-      likes: 18
-    },
-    {
-      id: 4,
-      tag: { label: 'Publication', color: 'bg-purple-100 text-purple-800 border-purple-300', strapColor: 'border-t-4 border-purple-500' },
-      title: 'Research Paper Published',
-      user: { name: 'Ananya Singh', squad: 'Squad 70' },
-      description: 'Co-authored paper on "AI in Education" published in IEEE conference proceedings.',
-      time: '2 weeks ago',
-      comments: 32,
-      likes: 9
-    },
-    {
-      id: 5,
-      tag: { label: 'Certification', color: 'bg-red-100 text-red-800 border-red-300', strapColor: 'border-t-4 border-red-500' },
-      title: 'AWS Solutions Architect',
-      user: { name: 'Vikram Joshi', squad: 'Squad 69' },
-      description: 'Passed AWS SAA-C03 exam with 895/1000 score. Cloud architecture mastery achieved!',
-      time: '3 weeks ago',
-      comments: 28,
-      likes: 6
-    },
-    {
-      id: 6,
-      tag: { label: 'Open Source', color: 'bg-cyan-100 text-cyan-800 border-cyan-300', strapColor: 'border-t-4 border-cyan-500' },
-      title: 'React Contributor',
-      user: { name: 'Sneha Reddy', squad: 'Squad 70' },
-      description: 'Made significant contributions to React.js core library. 5 PRs merged successfully!',
-      time: '1 month ago',
-      comments: 41,
-      likes: 15
-    },
-  ];
-
+  const achievements = []; // your mock data
   const [activeTab, setActiveTab] = useState('All');
+  const [isModalOpen, setIsModalOpen] = useState(false); // modal state
 
   // Helper function to map button text to tag label
   const getTagFromTab = (tabName) => {
@@ -88,26 +26,22 @@ const Achievement = () => {
     }
   };
 
-  // Filter the achievements based on the active tab
   const filteredAchievements = activeTab === 'All'
     ? achievements
     : achievements.filter(achievement => achievement.tag.label === getTagFromTab(activeTab));
 
   return (
-    // Main container with a white background for the rest of the page
-    <div className="bg-white font-sans min-h-screen flex flex-col">
-      {/* Header with the same background as the top of the body */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+    <div className={`bg-white font-sans min-h-screen flex flex-col ${isModalOpen ? "overflow-hidden" : ""}`}>
+      {/* Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo and Squad Info */}
             <div className="flex items-center">
               <img src="https://placehold.co/40x40/d1d5db/333333?text=Logo" alt="Squad Hub Logo" className="h-8 w-8 rounded-full" />
               <div className="ml-2 font-bold text-gray-800 text-lg">Squad Hub</div>
               <div className="ml-2 text-gray-500 text-sm hidden md:block">Squad 69 & 70</div>
             </div>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
               {['Dashboard', 'Announcements', 'Achievements', 'Notes'].map((item) => (
                 <a
@@ -120,9 +54,11 @@ const Achievement = () => {
               ))}
             </nav>
 
-            {/* Right-side actions */}
             <div className="flex items-center space-x-4">
-              <button className="hidden sm:inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 ease-in-out">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="hidden sm:inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 ease-in-out"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Achievement
               </button>
@@ -137,23 +73,28 @@ const Achievement = () => {
             </div>
           </div>
         </div>
+
+              
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow">
+      <main className={`flex-grow ${isModalOpen ? "blur-sm" : ""}`}>
         {/* Gradient section for the header and stats */}
         <div className="bg-gradient-to-r from-indigo-300 to-orange-200 py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Page Header */}
-            <div className="text-center mb-12">
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <Award className="h-10 w-10 text-yellow-500" />
-                <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">Achievements Wall</h1>
-              </div>
-              <p className="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">
-                Celebrate your wins and <span className="font-semibold text-gray-800">Share</span> your hackathon victories, dojo belts, internships, and more.
-              </p>
-            </div>
+          <div className="text-center mb-12">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            {/* Show only on desktop */}
+            <Award className="h-10 w-10 text-yellow-500 hidden md:block" />
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+              Achievements Wall
+            </h1>
+          </div>
+          <p className="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">
+            Celebrate your wins and <span className="font-semibold text-gray-800">Share</span> your hackathon victories, dojo belts, internships, and more.
+          </p>
+        </div>
 
             {/* Stats section */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
@@ -269,20 +210,130 @@ const Achievement = () => {
         </div>
       </main>
 
+      {/* Modal Form */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0  bg-opacity-40 backdrop-blur-sm"
+            onClick={() => setIsModalOpen(false)}
+          ></div>
+
+          {/* Modal Box */}
+          <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-lg p-6 z-50">
+            {/* Close button */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <h2 className="text-xl font-bold mb-4 text-gray-800">Add Achievement</h2>
+
+            <form className="space-y-4">
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Title</label>
+                <input
+                  type="text"
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="e.g. Won Hackathon 2024"
+                  required
+                />
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <textarea
+                  rows="3"
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Brief details about the achievement..."
+                  required
+                ></textarea>
+              </div>
+
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Category</label>
+                <select
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  required
+                >
+                  <option value="">Select category</option>
+                  <option value="Dojo Belt">Dojo Belt</option>
+                  <option value="Hackathon">Hackathon</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Publication">Publication</option>
+                  <option value="Certification">Certification</option>
+                  <option value="Open Source">Open Source</option>
+                </select>
+              </div>
+
+              {/* Achieved By */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Achieved By (email)</label>
+                <input
+                  type="text"
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="e.g. arjun.patel.s69@kalvium.community"
+                  required
+                />
+              </div>
+
+              {/* Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Date</label>
+                <input
+                  type="date"
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  required
+                />
+              </div>
+
+              {/* Images */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Images</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="mt-1 w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4
+                            file:rounded-full file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-indigo-50 file:text-indigo-700
+                            hover:file:bg-indigo-100"
+                />
+                <p className="text-xs text-gray-500 mt-1">You can upload multiple images.</p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       <footer className="bg-gray-800 text-gray-300 py-8 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex flex-col sm:flex-row items-center justify-center mb-4">
-            <img src="https://placehold.co/40x40/d1d5db/333333?text=Logo" alt="Squad Hub Logo" className="h-8 w-8 rounded-full" />
-            <div className="mt-2 sm:mt-0 sm:ml-2 font-bold text-gray-100 text-lg">Squad Hub</div>
-          </div>
-          <p className="text-sm">Empowering Squad 69 & 70 to achieve greatness together</p>
-          <p className="mt-4 text-xs text-gray-500">
-            © 2024 Kolvium Community
-          </p>
-          <p className="mt-1 text-xs text-gray-500">
-            Built with ❤️ for our squads
-          </p>
+          <p className="text-sm">© 2025 Kalviance</p>
         </div>
       </footer>
     </div>
