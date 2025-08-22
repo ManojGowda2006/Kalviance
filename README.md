@@ -42,4 +42,4 @@ Kalviance aims to foster **collaboration, recognition, and engagement** within t
 
 ---
 
-✨ Built with passion by **Team Agile**
+✨ Built with passion and love by **Team Agile**
