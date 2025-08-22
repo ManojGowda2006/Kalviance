@@ -28,7 +28,7 @@ For our first sprint, we are focusing on building the following features:
 
 ## 📂 Repository
 
-Project Repository: [Kalviance](https://github.com/Devansh1974/Kalviance)
+Project Repository: [Kalviance](https://github.com/ManojGowda2006/Kalviance.git)
 
 ## 🚀 Tech Stack (Planned)
 - Frontend: React + TailwindCSS  
