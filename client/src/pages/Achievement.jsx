@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Award, Activity, Grid, Plus, ChevronDown, MessageCircle, Heart, User2, X } from 'lucide-react';
+import axios from 'axios'
+
 
 const Achievement = () => {
-  const achievements = []; // your mock data
+  const [achievements, setAchievements] = useState([]); // your mock data
   const [activeTab, setActiveTab] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false); // modal state
+  const [form, setForm] = useState({title:"", description:"", category:"", achievedBy:"", date:"", image:""})
+  const API_URL=import.meta.env.VITE_API_URL;
 
   // Helper function to map button text to tag label
   const getTagFromTab = (tabName) => {
@@ -26,9 +30,38 @@ const Achievement = () => {
     }
   };
 
+  const fetchAchievements = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/achievements`, {
+        withCredentials: true
+      });
+      setAchievements(response.data);
+      console.log("Fetched achievements:", response.data);
+    } catch (error) {
+      console.error("Error fetching achievements:", error);
+    }
+  }
+
   const filteredAchievements = activeTab === 'All'
     ? achievements
     : achievements.filter(achievement => achievement.tag.label === getTagFromTab(activeTab));
+
+    const handleSubmit = async(e) => {
+      e.preventDefault();
+      console.log("Form submitted:", form);
+      const res = await axios.post(`${API_URL}/achievements`, form,{
+        withCredentials: true
+      });
+      if(res.status === 201){
+        alert("Achievement added successfully!");
+        setIsModalOpen(false);
+      }
+
+    }
+
+    useEffect(() => {
+      fetchAchievements();
+    }, [])
 
   return (
     <div className={`bg-white font-sans min-h-screen flex flex-col ${isModalOpen ? "overflow-hidden" : ""}`}>
@@ -101,14 +134,14 @@ const Achievement = () => {
               <div className="flex items-center justify-center p-6 bg-white rounded-xl shadow-md border border-gray-200">
                 <Award className="h-8 w-8 text-yellow-500 mr-4" />
                 <div>
-                  <div className="text-3xl font-bold text-gray-900">142</div>
+                  <div className="text-3xl font-bold text-gray-900">{achievements && achievements.length}</div>
                   <div className="text-sm text-gray-500">Total Achievements</div>
                 </div>
               </div>
               <div className="flex items-center justify-center p-6 bg-white rounded-xl shadow-md border border-gray-200">
                 <Activity className="h-8 w-8 text-red-500 mr-4" />
                 <div>
-                  <div className="text-3xl font-bold text-gray-900">23</div>
+                  <div className="text-3xl font-bold text-gray-900">{achievements && achievements.length}</div>
                   <div className="text-sm text-gray-500">This Month</div>
                 </div>
               </div>
@@ -156,29 +189,31 @@ const Achievement = () => {
           {/* Achievement Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAchievements.map((achievement) => (
-              <div key={achievement.id} className={`bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col ${achievement.tag.strapColor}`}>
+              <div key={achievement._id} className={`bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col `}>
                 <div className="flex justify-between items-center mb-4">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${achievement.tag.color}`}>
-                    {achievement.tag.label}
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border `}>
+                    {achievement.category}
                   </span>
                   {/* Placeholder for the tag icon */}
-                  {achievement.tag.label === 'Dojo Belt' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Dojo Belt" />}
-                  {achievement.tag.label === 'Hackathon' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Hackathon" />}
-                  {achievement.tag.label === 'Internship' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Internship" />}
-                  {achievement.tag.label === 'Publication' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Publication" />}
-                  {achievement.tag.label === 'Certification' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Certification" />}
-                  {achievement.tag.label === 'Open Source' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Open Source" />}
+                  {achievement.category === 'Academic' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Academic" />}
+                  {achievement.category === 'Sports' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Sports" />}
+                  {achievement.category === 'Dojo' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Dojo" />}
+                  {achievement.category === 'Hackathon' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Hackathon" />}
+                  {achievement.category === 'Community' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Community" />}
+                  {achievement.category === 'Internship' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Internship" />}
+                  {achievement.category === 'open-source' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Open Source" />}
+                  {achievement.category === 'Other' && <img src="https://placehold.co/24x24/d1d5db/333333?text=Icon" alt="Other" />}
                 </div>
                 
                 <h3 className="text-xl font-bold text-gray-900 mt-2">{achievement.title}</h3>
                 
                 <div className="flex items-center mt-2 mb-4">
                   <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-sm text-gray-500">
-                      <User2 className="h-5 w-5" />
+                      {achievement.achievedBy.profilePicture && <img src={achievement.achievedBy.profilePicture} className="h-5 w-5 rounded-full object-cover" />}
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">{achievement.user.name}</p>
-                    <p className="text-xs text-gray-500">{achievement.user.squad}</p>
+                    <p className="text-sm font-medium text-gray-900">{achievement.achievedBy.name}</p>
+                    <p className="text-xs text-gray-500">{achievement.achievedBy.email}</p>
                   </div>
                 </div>
 
@@ -231,7 +266,7 @@ const Achievement = () => {
 
             <h2 className="text-xl font-bold mb-4 text-gray-800">Add Achievement</h2>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">Title</label>
@@ -240,6 +275,7 @@ const Achievement = () => {
                   className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="e.g. Won Hackathon 2024"
                   required
+                  onChange={(e) => setForm({...form, title: e.target.value})}
                 />
               </div>
 
@@ -251,6 +287,7 @@ const Achievement = () => {
                   className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="Brief details about the achievement..."
                   required
+                  onChange={(e) => setForm({...form, description: e.target.value})}
                 ></textarea>
               </div>
 
@@ -260,14 +297,17 @@ const Achievement = () => {
                 <select
                   className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   required
+                  onChange={(e) => setForm({...form, category: e.target.value})}
                 >
                   <option value="">Select category</option>
-                  <option value="Dojo Belt">Dojo Belt</option>
+                  <option value="Academic">Academic</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Dojo">Dojo</option>
                   <option value="Hackathon">Hackathon</option>
+                  <option value="Community">Community</option>
                   <option value="Internship">Internship</option>
-                  <option value="Publication">Publication</option>
-                  <option value="Certification">Certification</option>
-                  <option value="Open Source">Open Source</option>
+                  <option value="open-source">open-source</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
 
@@ -279,6 +319,7 @@ const Achievement = () => {
                   className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="e.g. arjun.patel.s69@kalvium.community"
                   required
+                  onChange={(e) => setForm({...form, achievedBy: e.target.value})}
                 />
               </div>
 
@@ -289,6 +330,7 @@ const Achievement = () => {
                   type="date"
                   className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   required
+                  onChange={(e) => setForm({...form, date: e.target.value})}
                 />
               </div>
 
