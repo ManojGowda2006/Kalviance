@@ -4,7 +4,7 @@ const User = require('../models/user')
 // Create (POST) a new achievement
 async function createAchievement(req, res) {
   try {
-    const { title, description, category, achievedBy, date, images } = req.body;
+    const { title, description, category, achievedBy, date, image } = req.body;
 
     // Manual validation for required fields
     if (!title || !description || !category || !achievedBy || !date) {
@@ -22,7 +22,7 @@ async function createAchievement(req, res) {
       category,
       achievedBy : achievedByUser.id,
       date,
-      images: images || []
+      image: image
     });
 
     const savedAchievement = await achievement.save();

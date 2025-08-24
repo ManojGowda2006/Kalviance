@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Award, Activity, Grid, Plus, ChevronDown, MessageCircle, Heart, X, Menu } from 'lucide-react';
 import axios from 'axios';
+const CLOUDINARY_API = import.meta.env.VITE_CLOUDINARY_API
 
 const Achievement = () => {
   const [achievements, setAchievements] = useState([]);
   const [activeTab, setActiveTab] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -33,8 +35,7 @@ const Achievement = () => {
   const fetchAchievements = async () => {
     try {
       const response = await axios.get(`${API_URL}/achievements`, { withCredentials: true });
-      setAchievements(response.data.achievements || []);
-      console.log("Fetched achievements:", response.data.achievements);
+      setAchievements(response.data);
     } catch (error) {
       console.error("Error fetching achievements:", error);
       setAchievements([]);
@@ -45,6 +46,25 @@ const Achievement = () => {
     activeTab === 'All'
       ? achievements
       : achievements.filter(a => a.category === getTagFromTab(activeTab));
+
+   const handleImageUpload = async (file) => {
+    setLoading(true)
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "profile_pictures");
+    formData.append("folder", "ProfilePictures");
+
+    try {
+      const res = await axios.post(
+        `${CLOUDINARY_API}`,
+        formData
+      );
+      setForm((prev) => ({...prev, image : res.data.secure_url})); 
+      setLoading(false)
+    } catch (err) {
+      console.error("Image upload failed", err);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -196,7 +216,7 @@ const Achievement = () => {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
-          <div className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
+          <div className="absolute inset-0  bg-opacity-40 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
           <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-sm sm:max-w-lg p-6 sm:p-8 z-50">
             <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"><X className="h-5 w-5" /></button>
             <h2 className="text-xl font-bold mb-4 text-gray-800">Add Achievement</h2>
@@ -205,8 +225,8 @@ const Achievement = () => {
               <div><label className="block text-sm font-medium text-gray-700">Description</label><textarea rows="3" className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Brief details about the achievement..." required onChange={e => setForm({ ...form, description: e.target.value })}></textarea></div>
               <div><label className="block text-sm font-medium text-gray-700">Category</label><select className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required onChange={e => setForm({ ...form, category: e.target.value })}><option value="">Select category</option><option value="Academic">Academic</option><option value="Sports">Sports</option><option value="Dojo">Dojo</option><option value="Hackathon">Hackathon</option><option value="Community">Community</option><option value="Internship">Internship</option><option value="open-source">open-source</option><option value="Other">Other</option></select></div>
               <div><label className="block text-sm font-medium text-gray-700">Achieved By (email)</label><input type="text" className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. arjun.patel.s69@kalvium.community" required onChange={e => setForm({ ...form, achievedBy: e.target.value })} /></div>
-              <div><label className="block text-sm font-medium text-gray-700">Date</label><input type="date" className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required onChange={e => setForm({ ...form, date: e.target.value })} /></div>
-              <div><label className="block text-sm font-medium text-gray-700">Images</label><input type="file" accept="image/*" multiple className="mt-1 w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" /><p className="text-xs text-gray-500 mt-1">You can upload multiple images.</p></div>
+              <div><label className="block text-sm font-medium text-gray-700">Date</label><input type="date" className="mt-1 w-full px-4 py-2 border rounded-lg Mofocus:ring-indigo-500 focus:border-indigo-500" required onChange={e => setForm({ ...form, date: e.target.value })} /></div>
+              <div><label className="block text-sm font-medium text-gray-700">Images</label><input type="file" onChange={(e) => handleImageUpload(e.target.files[0])} accept="image/*" multiple className="mt-1 w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" /><p className="text-xs text-gray-500 mt-1">{loading? "Uploading...": "upload 1 image"}</p></div>
               <div className="flex justify-end space-x-3"><button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100">Cancel</button><button type="submit" className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Save</button></div>
             </form>
           </div>
