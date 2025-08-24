@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/user.js');
 require('dotenv').config();
 const {OAuth2Client} = require('google-auth-library');
 const jwt = require('jsonwebtoken');
@@ -25,15 +25,16 @@ const login = async (req, res) => {
     }
 
     // Find or create user
-    // let user = await User.findOne({ email: payload.email });
-    // if (!user) {
-    //   user = await User.create({
-    //     googleId: payload.sub,
-    //     name: payload.name,
-    //     email: payload.email,
-    //     avatar: payload.picture
-    //   });
-    // }
+    let user = await User.findOne({ email: payload.email });
+    console.log(user);
+    if (!user) {
+      user = await User.create({
+        googleId: payload.sub,
+        name: payload.name,
+        email: payload.email,
+        profilePicture: payload.picture
+      });
+    }
 
     // Create JWT
     const appToken = jwt.sign(

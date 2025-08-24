@@ -6,13 +6,16 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const router = require('./routes/route');
 const connectDB = require('./database/database');
+require('dotenv').config();
 
 // Connect to MongoDB
-// connectDB();
+connectDB();
 
+// Middleware to parse cookies
+app.use(cookieParser());
 
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: process.env.CLIENT_URL,
   credentials: true, 
 }));
 
@@ -20,8 +23,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/api', router);
-// Middleware to parse cookies
-app.use(cookieParser());
+
 
 
 app.listen(port, () => {
