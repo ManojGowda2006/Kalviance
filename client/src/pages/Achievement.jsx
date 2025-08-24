@@ -119,7 +119,7 @@ const Achievement = () => {
             <p className="mt-2 text-md sm:text-lg text-gray-600 max-w-2xl mx-auto px-2">Celebrate your wins and <span className="font-semibold text-gray-800">Share</span> your hackathon victories, dojo belts, internships, and more.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  {/* Total Achievements */}
+          {/* Total Achievements */}
           <div className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md border border-gray-200 text-center">
             <Award className="h-8 w-8 sm:h-10 sm:w-10 text-yellow-500 mb-2" />
             <div className="text-2xl sm:text-3xl font-bold text-gray-900">{achievements.length}</div>
