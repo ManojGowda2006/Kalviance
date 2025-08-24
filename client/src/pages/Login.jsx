@@ -38,11 +38,13 @@ const Login = () => {
                 );
                 if (res.status === 200) {
                   console.log("Login Successful");
+                  alert("Login Successful");
                   navigate("/achievements");
 
                 }
               } catch (error) {
                 console.error("Login Error:", error);
+                alert("Your login attempt was unsuccessful. Access is restricted to users with a valid Kalvium Community email address. Please use your registered Kalvium email to continue.");
               }
             }}
             onError={() => {
