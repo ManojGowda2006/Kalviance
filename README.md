@@ -4,11 +4,14 @@ Welcome to **Kalviance** 🎓 – a community-driven platform built by **Team Ag
 
 ## 👥 Team Agile Members
 - **Devansh** – Product Manager  
-- **Nahda** – Scrum Master  
-- **Manoj** – Developer  
+- **Dhananjai** - Developer
 - **Mahanandhan** – Developer  
 - **Diya** – Developer  
 - **Indhuja** – Developer  
+
+## Ex Team Contruibutors -
+- **Nahda** – Scrum Master  
+- **Manoj** – Developer 
 
 ## 🏹 Sprint 1 – Product Backlog
 
