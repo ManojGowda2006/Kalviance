@@ -37,6 +37,7 @@ const Achievement = () => {
     try {
       const response = await axios.get(`${API_URL}/achievements`, { withCredentials: true });
       setAchievements(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error("Error fetching achievements:", error);
       setAchievements([]);
@@ -198,7 +199,7 @@ const Achievement = () => {
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mt-2">{achievement.title}</h3>
                 <div className="flex items-center mt-2 mb-4">
-                  {achievement.achievedBy?.profilePicture && <img src={achievement.achievedBy.profilePicture} className="h-8 w-8 rounded-full object-cover" alt="profile" />}
+                  {achievement.achievedBy?.profilePicture && <img src={achievement.achievedBy?.profilePicture} className="h-8 w-8 rounded-full object-cover" alt="profile" />}
                   <div className="ml-3">
                     <p className="text-sm font-medium text-gray-900">{achievement.achievedBy?.name || achievement.achievedBy}</p>
                     <p className="text-xs text-gray-500">{achievement.achievedBy?.email}</p>
