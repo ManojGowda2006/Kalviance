@@ -38,7 +38,7 @@ async function getAchievements(req, res) {
     const achievements = await Achievement.find().populate('achievedBy', 'name email profilePicture');
     res.status(200).json(achievements);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json(a{ error: err.message });
   }
 }
 
