@@ -4,11 +4,13 @@ const User = require('../models/user');
 // Create (POST) a new note
 async function createNote(req, res) {
   try {
-    const { title, content } = req.body;
+    // Correctly get title, description, and fileUrl from the request body
+    const { title, description, fileUrl } = req.body;
     const userEmail = req.user.email; // from userAuth middleware
 
-    if (!title || !content) {
-      return res.status(400).json({ error: "Title and content are required." });
+    // Updated validation to check for all required fields
+    if (!title || !description || !fileUrl) {
+      return res.status(400).json({ error: "Title, description, and a file are required." });
     }
 
     const user = await User.findOne({ email: userEmail });
@@ -16,14 +18,18 @@ async function createNote(req, res) {
       return res.status(404).json({ message: "User not found." });
     }
 
+    // Create the note with all the correct fields from the request
     const note = new Note({
       title,
-      content,
-      createdBy: user._id, // Assign the user's ObjectId
+      description,
+      fileUrl,
+      createdBy: user._id,
     });
 
     const savedNote = await note.save();
-    res.status(201).json(savedNote);
+    // Populate the newly created note with user info before sending it back
+    const populatedNote = await Note.findById(savedNote._id).populate('createdBy', 'name email profilePicture');
+    res.status(201).json(populatedNote);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -70,3 +76,4 @@ async function deleteNote(req, res) {
 
 
 module.exports = { createNote, getNotes, deleteNote };
+

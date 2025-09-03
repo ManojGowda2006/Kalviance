@@ -7,26 +7,23 @@ const { getMe } = require('../controllers/User');
 const userAuth = require('../middleWare/middleWare');
 
 // --- Authentication ---
-// Handles Google login and creates a user session
 router.post('/auth/google', login);
 
 // --- User ---
-// Gets the currently logged-in user's data
+// Defines the GET /api/me route
 router.get('/me', userAuth, getMe);
 
 // --- Achievements ---
-// Gets all achievements (for the main wall)
-router.get('/achievements', userAuth, getAchievements);
-// Creates a new achievement
 router.post('/achievements', userAuth, createAchievement);
+router.get('/achievements', userAuth, getAchievements);
 
 // --- Notes ---
-// Gets all notes created by the logged-in user
-router.get('/notes', userAuth, getNotes);
-// Creates a new note
+// Defines the POST /api/notes route
 router.post('/notes', userAuth, createNote);
-// Deletes a specific note, checking for ownership
-router.delete('/notes/:noteId', userAuth, deleteNote);
+// Defines the GET /api/notes route
+router.get('/notes', userAuth, getNotes);
+// Defines the DELETE /api/notes/:id route
+router.delete('/notes/:id', userAuth, deleteNote);
 
 module.exports = router;
 
