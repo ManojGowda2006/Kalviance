@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Award, Activity, Grid, Plus, ChevronDown, MessageCircle, Heart, X, Menu } from 'lucide-react';
 import axios from 'axios';
-const CLOUDINARY_API = import.meta.env.VITE_CLOUDINARY_API
+import { Link, NavLink } from 'react-router-dom'; // <-- IMPORT NavLink
 import logo from "../assets/logo.png";
+
+const CLOUDINARY_API = import.meta.env.VITE_CLOUDINARY_API;
 
 const Achievement = () => {
   const [achievements, setAchievements] = useState([]);
@@ -85,6 +87,13 @@ const Achievement = () => {
 
   useEffect(() => { fetchAchievements(); }, []);
 
+  const navLinks = [
+    { name: 'Dashboard', path: '/dashboard' },
+    { name: 'Announcements', path: '/announcements' },
+    { name: 'Achievements', path: '/achievements' },
+    { name: 'Notes', path: '/notes' }
+  ];
+
   return (
     <div className={`bg-white font-sans min-h-screen flex flex-col ${isModalOpen ? "overflow-hidden" : ""}`}>
       {/* Header */}
@@ -97,10 +106,16 @@ const Achievement = () => {
               <div className="ml-2 text-gray-500 text-sm hidden md:block">Squad 69 & 70</div>
             </div>
             <nav className="hidden md:flex space-x-8">
-              {["Dashboard", "Announcements", "Achievements", "Notes"].map(item => (
-                <a key={item} href="#" className={`text-gray-500 hover:text-indigo-600 transition duration-150 ease-in-out ${item === "Achievements" ? "text-indigo-600 font-medium border-b-2 border-indigo-600 pb-1" : ""}`}>
-                  {item}
-                </a>
+              {navLinks.map(link => (
+                <NavLink 
+                  key={link.name} 
+                  to={link.path} 
+                  className={({ isActive }) =>
+                    `text-gray-500 hover:text-indigo-600 transition duration-150 ease-in-out ${isActive ? "text-indigo-600 font-medium border-b-2 border-indigo-600 pb-1" : ""}`
+                  }
+                >
+                  {link.name}
+                </NavLink>
               ))}
             </nav>
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -120,18 +135,25 @@ const Achievement = () => {
         {isNavOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {["Dashboard", "Announcements", "Achievements", "Notes"].map(item => (
-                <a key={item} href="#" className={`block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-indigo-600 transition duration-150 ease-in-out ${item === "Achievements" ? "bg-indigo-100 text-indigo-700" : ""}`}>
-                  {item}
-                </a>
+              {navLinks.map(link => (
+                <NavLink 
+                  key={link.name} 
+                  to={link.path} 
+                  className={({ isActive }) =>
+                    `block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-indigo-600 transition duration-150 ease-in-out ${isActive ? "bg-indigo-100 text-indigo-700" : ""}`
+                  }
+                >
+                  {link.name}
+                </NavLink>
               ))}
             </div>
           </div>
         )}
       </header>
 
-      {/* Main */}
+      {/* Main Content (No changes below this line) */}
       <main className={`flex-grow ${isModalOpen ? "blur-sm" : ""}`}>
+        {/* ... The rest of your main content ... */}
         <div className="bg-gradient-to-r from-[#5B4B85] via-[#7B6BA5] to-[#9B8BC5] py-8 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="flex items-center justify-center space-x-2 mb-2 sm:mb-4">
@@ -223,7 +245,7 @@ const Achievement = () => {
         </div>
       </main>
 
-      {/* Modal */}
+      {/* Modal (No changes here) */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
           <div className="absolute inset-0 bg-opacity-40 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
