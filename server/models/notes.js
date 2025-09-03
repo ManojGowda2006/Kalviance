@@ -15,6 +15,11 @@ const noteSchema = new mongoose.Schema({
     required: true,
     ref: 'User'
   },
+   // Add the fileUrl to store the link to the uploaded PDF
+  fileUrl: {
+    type: String,
+    required: true 
+  }, 
   createdAt: {
     type: Date,
     default: Date.now,
