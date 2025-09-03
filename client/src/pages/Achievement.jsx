@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Award, Activity, Grid, Plus, ChevronDown, MessageCircle, Heart, X, Menu } from 'lucide-react';
 import axios from 'axios';
-import { Link, NavLink } from 'react-router-dom'; // <-- IMPORT NavLink
+import { Link, NavLink } from 'react-router-dom';
 import logo from "../assets/logo.png";
 
 const CLOUDINARY_API = import.meta.env.VITE_CLOUDINARY_API;
@@ -151,7 +151,7 @@ const Achievement = () => {
         )}
       </header>
 
-      {/* Main Content (No changes below this line) */}
+      {/* Main Content  */}
       <main className={`flex-grow ${isModalOpen ? "blur-sm" : ""}`}>
         {/* ... The rest of your main content ... */}
         <div className="bg-gradient-to-r from-[#5B4B85] via-[#7B6BA5] to-[#9B8BC5] py-8 sm:py-12">
@@ -245,7 +245,7 @@ const Achievement = () => {
         </div>
       </main>
 
-      {/* Modal (No changes here) */}
+      {/* Modal*/}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
           <div className="absolute inset-0 bg-opacity-40 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
