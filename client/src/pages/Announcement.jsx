@@ -34,6 +34,7 @@ const getCategoryStyle = (category) => {
 const Announcement = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(""); // State for the search input
     const [form, setForm] = useState({
         title: "",
         description: "",
@@ -79,8 +80,14 @@ const Announcement = () => {
         fetchAnnouncements();
     }, []);
     
-    const pinnedAnnouncements = announcements.filter(a => a.pinned);
-    const recentAnnouncements = announcements.filter(a => !a.pinned);
+    // Filter announcements based on the search query
+    const filteredAnnouncements = announcements.filter(announcement =>
+        announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        announcement.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const pinnedAnnouncements = filteredAnnouncements.filter(a => a.pinned);
+    const recentAnnouncements = filteredAnnouncements.filter(a => !a.pinned);
 
     return (
         <div className="bg-gray-50 font-sans min-h-screen">
@@ -107,6 +114,8 @@ const Announcement = () => {
                             type="text"
                             placeholder="Search announcements..."
                             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-indigo-500 focus:border-indigo-500"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                     <button
@@ -134,7 +143,7 @@ const Announcement = () => {
                 )}
 
 
-                {/* Recent Announcements */}
+                {/* Recent Announcement */}
                 <div>
                      <h2 className="text-2xl font-bold text-gray-800 mb-4">Recent Announcements</h2>
                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -145,7 +154,7 @@ const Announcement = () => {
                                  <AnnouncementCard key={announcement._id} announcement={announcement} />
                             ))
                         ) : (
-                            <p className="text-gray-500 col-span-full text-center">No recent announcements found.</p>
+                            <p className="text-gray-500 col-span-full text-center">No announcements match your search.</p>
                         )}
                     </div>
                 </div>
@@ -221,7 +230,4 @@ const AnnouncementCard = ({ announcement }) => {
         </div>
     );
 };
-
-
 export default Announcement;
-
