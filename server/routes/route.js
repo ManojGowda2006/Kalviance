@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
-// --- Import Controllers ---
 const login = require('../controllers/Authentication');
 const { createAchievement, getAchievements } = require('../controllers/Achievements');
 const { createNote, getNotes, deleteNote } = require('../controllers/Notes');
 const { getMe } = require('../controllers/User');
-const { createAnnouncement, getAnnouncements } = require('../controllers/Announcements'); // Import the new controller
+const { createAnnouncement, getAnnouncements } = require('../controllers/Announcements'); // Import announcement controllers
 const userAuth = require('../middleWare/middleWare');
 
 // --- Authentication ---
@@ -24,8 +22,9 @@ router.post('/notes', userAuth, createNote);
 router.get('/notes', userAuth, getNotes);
 router.delete('/notes/:id', userAuth, deleteNote);
 
-// --- Announcements (New Section) ---
+// --- Announcements ---
 router.post('/announcements', userAuth, createAnnouncement);
 router.get('/announcements', userAuth, getAnnouncements);
 
 module.exports = router;
+
