@@ -17,4 +17,3 @@ const getMe = async (req, res) => {
 // We are now exporting an object containing the getMe function.
 // This is the crucial fix.
 module.exports = { getMe };
-
