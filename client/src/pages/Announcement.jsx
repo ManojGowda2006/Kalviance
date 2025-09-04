@@ -230,7 +230,4 @@ const AnnouncementCard = ({ announcement }) => {
         </div>
     );
 };
-
-
 export default Announcement;
-
