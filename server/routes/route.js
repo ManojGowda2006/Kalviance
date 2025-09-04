@@ -28,5 +28,4 @@ router.delete('/notes/:id', userAuth, deleteNote);
 router.post('/announcements', userAuth, createAnnouncement);
 router.get('/announcements', userAuth, getAnnouncements);
 
-
 module.exports = router;
