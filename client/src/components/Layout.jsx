@@ -14,6 +14,7 @@ const Layout = () => {
       try {
         const { data } = await axios.get(`${API_URL}/me`, { withCredentials: true });
         setCurrentUser(data);
+        console.log(data)
       } catch (error) {
         console.error("Failed to fetch user", error);
         // Handle error, maybe redirect to login
