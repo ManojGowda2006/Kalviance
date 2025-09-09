@@ -26,7 +26,6 @@ const login = async (req, res) => {
 
     // Find or create user
     let user = await User.findOne({ email: payload.email });
-    console.log(user);
     if (!user) {
       user = await User.create({
         googleId: payload.sub,
@@ -38,7 +37,7 @@ const login = async (req, res) => {
 
     // Create JWT
     const appToken = jwt.sign(
-      {email: payload.email },
+      {email: payload.email, id: user._id }, // Include user ID
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -58,4 +57,14 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = login;
+// Logout function
+const logout = (req, res) => {
+  try {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    res.status(500).json({ message: 'Logout failed', error: error.message });
+  }
+};
+
+module.exports = { login, logout };

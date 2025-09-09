@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, Link } from 'react-router-dom'; // Import Link
 import axios from 'axios';
 import { Plus, Menu } from 'lucide-react';
 import logo from "../assets/logo.png";
@@ -54,10 +54,11 @@ const Layout = () => {
               ))}
             </nav>
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="relative">
+              {/* Profile picture is now a link to the profile page */}
+              <Link to="/profile" className="relative">
                 <img src={currentUser?.profilePicture || 'https://placehold.co/40x40/d1d5db/333333?text=U'} alt="User" className="h-10 w-10 rounded-full cursor-pointer" />
                 <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span>
-              </div>
+              </Link>
               <button onClick={() => setIsNavOpen(!isNavOpen)} className="md:hidden text-gray-500 hover:text-gray-800 focus:outline-none focus:text-gray-800">
                 <Menu className="h-6 w-6" />
               </button>
