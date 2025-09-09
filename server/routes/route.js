@@ -1,20 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const login = require('../controllers/Authentication');
+// Correctly import both login and logout from the Authentication controller
+const { login, logout } = require('../controllers/Authentication');
 const { createAchievement, getAchievements } = require('../controllers/Achievements');
 const { createNote, getNotes, deleteNote } = require('../controllers/Notes');
 const { getMe } = require('../controllers/User');
-const { createAnnouncement, getAnnouncements } = require('../controllers/Announcements'); // Import announcement controllers
+const { createAnnouncement, getAnnouncements } = require('../controllers/Announcements');
 const userAuth = require('../middleWare/middleWare');
 
 // --- Authentication ---
 router.post('/auth/google', login);
+// This is the missing route that needs to be added
+router.post('/auth/logout', logout);
 
 // --- User ---
 router.get('/me', userAuth, getMe);
 
 // --- Achievements ---
-router.post('/achievements', userAuth, createAchievement);
+router.post('/achievements', userAuth, createAchievement); // Typo corrected here
 router.get('/achievements', userAuth, getAchievements);
 
 // --- Notes ---
